@@ -13,6 +13,7 @@ python = "^3.12"
 click = "^8.1.7"
 
 httpx = "^0.27.0"
+asyncclick = "^8.1.7.2"
 [tool.poetry.dev-dependencies]
 black = "^24.4.2"
 flake8 = "^7.0.0"
