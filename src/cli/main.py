@@ -27,7 +27,7 @@ async def show():
     result = await query.execute()
 
     for member, jobs in result.items():
-        click.echo(f"Jobs for {member.name}:")
+        click.echo(f"Jobs for {member.name} ({member.bio}):")
         for job in jobs:
             click.echo(f"    {job.title} ({job.location})")
 
