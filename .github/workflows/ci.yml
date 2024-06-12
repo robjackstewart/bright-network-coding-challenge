@@ -15,7 +15,7 @@ jobs:
       - name: Install tools
         run: pipx install poetry
       - name: Poetry Install
-				run: poetry install
+        run: poetry install
       - name: Build CLI
         run: poetry build
       - name: black
