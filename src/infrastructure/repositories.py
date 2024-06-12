@@ -9,7 +9,7 @@ class RESTRepositoryBase:
     def __init__(self, base_url: str):
         self.base_url = base_url
 
-    async def fetch_many(self, url: str, entity_type: Type) -> list:
+    async def _fetch_many(self, url: str, entity_type: Type) -> list:
         async with AsyncClient(base_url=self.base_url) as client:
             response = await client.get(url)
             if response.status_code == 200:
@@ -26,7 +26,7 @@ class JobsRepository(RESTRepositoryBase, JobsRepositoryInterface):
         super().__init__(base_url)
 
     async def jobs(self) -> list[Job]:
-        return await self.fetch_many("/jobs.json", Job)
+        return await self._fetch_many("/jobs.json", Job)
 
 
 class MembersRepository(RESTRepositoryBase, MembersRepositoryInterface):
@@ -35,4 +35,4 @@ class MembersRepository(RESTRepositoryBase, MembersRepositoryInterface):
         super().__init__(base_url)
 
     async def members(self) -> list[Member]:
-        return await self.fetch_many("/members.json", Member)
+        return await self._fetch_many("/members.json", Member)
