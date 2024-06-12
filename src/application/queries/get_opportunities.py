@@ -1,8 +1,6 @@
 from __future__ import annotations
 import re
-from typing import Optional, Tuple
-
-import nltk
+from typing import Optional
 from src.application.common.interfaces.interfaces import (
     JobsRepositoryInterface,
     MembersRepositoryInterface,
