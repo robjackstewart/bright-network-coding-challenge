@@ -8,16 +8,17 @@ class JobsRepositoryInterface(ABC):
 
     @abstractmethod
     async def jobs(self) -> Optional[list[Job]]:
-        """ Get all jobs
+        """Get all jobs
 
         :return: list[Job]
         """
+
 
 class MembersRepositoryInterface(ABC):
 
     @abstractmethod
     async def members(self) -> Optional[list[Member]]:
-        """ Get all jobs
+        """Get all jobs
 
         :return: list[Member]
         """

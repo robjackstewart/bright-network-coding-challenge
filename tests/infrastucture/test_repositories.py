@@ -18,7 +18,10 @@ async def test_jobs_repository_jobs_returns_jobs_from_api():
     jobs = [job]
     jobs_json_response = [job.to_dict()]
 
-    with patch(f"{JobsRepository.__module__}.{AsyncClient.__name__}.{AsyncClient.get.__name__}", return_value=Response(200, json=jobs_json_response)) as get_mock:
+    with patch(
+        f"{JobsRepository.__module__}.{AsyncClient.__name__}.{AsyncClient.get.__name__}",
+        return_value=Response(200, json=jobs_json_response),
+    ) as get_mock:
 
         # Act
         result = await jobs_repository.jobs()
@@ -36,7 +39,10 @@ async def test_members_repository_members_returns_members_from_api():
     members = [member]
     members_json_response = [member.to_dict()]
 
-    with patch(f"{MembersRepository.__module__}.{AsyncClient.__name__}.{AsyncClient.get.__name__}", return_value=Response(200, json=members_json_response)) as get_mock:
+    with patch(
+        f"{MembersRepository.__module__}.{AsyncClient.__name__}.{AsyncClient.get.__name__}",
+        return_value=Response(200, json=members_json_response),
+    ) as get_mock:
 
         # Act
         result = await members_repository.members()

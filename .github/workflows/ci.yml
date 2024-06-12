@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  sdk-cli:
+    name: Build and test CLI
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/devcontainers/python:3.12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install tools
+        run: pipx install poetry
+      - name: Poetry Install
+				run: poetry install
+      - name: Build CLI
+        run: poetry build
+      - name: black
+        run: poetry run black --check .
+      - name: Run unit tests
+        run: poetry run pytest

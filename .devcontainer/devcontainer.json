@@ -1,5 +1,5 @@
 {
-    "image": "mcr.microsoft.com/vscode/devcontainers/python",
+    "image": "mcr.microsoft.com/devcontainers/python:3.12",
     "postCreateCommand": "poetry config virtualenvs.in-project true",
     "postAttachCommand": "poetry install",
     "features": {
@@ -19,7 +19,8 @@
             "extensions": [
                 "ms-python.python",
                 "ms-python.vscode-pylance",
-                "ms-python.black-formatter"
+                "ms-python.black-formatter",
+                "github.vscode-github-actions"
             ]
         }
     }

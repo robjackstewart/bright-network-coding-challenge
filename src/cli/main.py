@@ -32,5 +32,5 @@ async def show():
             click.echo(f"    {job.title} ({job.location})")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

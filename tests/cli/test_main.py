@@ -1,4 +1,3 @@
-
 from unittest.mock import patch
 import uuid
 import pytest
@@ -16,10 +15,7 @@ async def test_show_prints_result_of_get_opportunities_query(runner: CliRunner):
     member1 = Member(name=str(uuid.uuid4()), bio=str(uuid.uuid4()))
     member2 = Member(name=str(uuid.uuid4()), bio=str(uuid.uuid4()))
     jobs: list[Job] = [job1, job2]
-    query_result: dict[Member, list[Job]] = {
-        member1: jobs,
-        member2: jobs
-    }
+    query_result: dict[Member, list[Job]] = {member1: jobs, member2: jobs}
     expected = f"""
 Jobs for {member1.name}:
     {job1.title} ({job1.location})
