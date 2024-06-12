@@ -33,6 +33,8 @@ async def show():
         click.echo(f"Jobs for {member.name} ({member.bio}):")
         for job in jobs:
             click.echo(f"    {job.title} ({job.location})")
+        if not any(jobs):
+            click.echo("    No opportunities found.")
 
 
 if __name__ == "__main__":

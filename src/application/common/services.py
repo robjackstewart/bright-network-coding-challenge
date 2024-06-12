@@ -1,49 +1,60 @@
 from typing import Tuple
 from src.application.common.interfaces import GeographyCalculatorInterface
+from src.common.utils import chunk
 
 
 class GeographyCalculator(GeographyCalculatorInterface):
+    __NON_INCLUSIVER_PREFIXES = ["outside of", "not in", "outwith"]
+    __INCLUSIVE_PREFIXES = ["within", "in"]
+    __MIGRATE_TO_PREFIXES = ["relocate to", "move to"]
+    __MIGRATE_FROM_PREFIXES = ["away from", "leave", "exit"]
 
     def extract_preferred_geographies(
         self, subject: str, available_geographies: list[str]
     ) -> list[str]:
-        non_inclusive_prefixes = ["outside of", "not in", "outwith"]
-        inclusive_prefixes = ["within", "in"]
-        migrate_to_to_stems = ["relocate to"]
-        migrate_from_stems = ["away from", "leave", "exit"]
+
+        preferred_geographies: list[str] = []
 
         subject = subject.lower()
 
-        geographies_in_subject_with_index: [Tuple[str, int]] = []
+        sections, geography_indicies = chunk(subject, available_geographies)
 
-        for geography in available_geographies:
-            index_of_location_in_subject = subject.find(geography)
-            if index_of_location_in_subject != -1:
-                geographies_in_subject_with_index.append(
-                    (geography, index_of_location_in_subject)
-                )
-
-        geographies_in_subject_count = len(geographies_in_subject_with_index)
+        geographies_in_subject_count = len(geography_indicies)
 
         if geographies_in_subject_count == 0:
             return available_geographies
         elif geographies_in_subject_count == 1:
-            geography, index = geographies_in_subject_with_index[0]
-            subject_from_start_to_geography = subject[0:index]
+            subject_from_start_to_geography = sections[geography_indicies[0] - 1]
             is_inclusive_of_geography = any(
-                entry in subject_from_start_to_geography for entry in inclusive_prefixes
+                entry in subject_from_start_to_geography
+                for entry in GeographyCalculator.__INCLUSIVE_PREFIXES
             )
             is_exclusive_of_geography = any(
                 entry in subject_from_start_to_geography
-                for entry in non_inclusive_prefixes
+                for entry in GeographyCalculator.__NON_INCLUSIVER_PREFIXES
             )
             match (is_inclusive_of_geography, is_exclusive_of_geography):
                 case (True, False):
-                    return [geography]
+                    preferred_geographies.append(sections[geography_indicies[0]])
                 case (False, True):
-                    return [geo for geo in available_geographies if geo != geography]
+                    for geo in available_geographies:
+                        if geo != sections[geography_indicies[0]]:
+                            preferred_geographies.append(geo)
                 case _:
-                    return available_geographies
+                    preferred_geographies = available_geographies
         else:
 
-            return available_geographies
+            for index in geography_indicies:
+                subject_from_start_to_geography = sections[index - 1]
+                is_inclusive_of_geography = any(
+                    entry in subject_from_start_to_geography
+                    for entry in GeographyCalculator.__MIGRATE_TO_PREFIXES
+                )
+                is_exclusive_of_geography = any(
+                    entry in subject_from_start_to_geography
+                    for entry in GeographyCalculator.__MIGRATE_FROM_PREFIXES
+                )
+                if is_inclusive_of_geography and not is_exclusive_of_geography:
+                    preferred_geographies.append(sections[index])
+
+        return preferred_geographies
