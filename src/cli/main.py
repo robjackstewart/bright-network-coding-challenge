@@ -1,9 +1,7 @@
 from __future__ import annotations
 import asyncclick as click
-import httpx
-
 from src.application.queries.get_opportunities import GetOpportunitiesQuery
-from src.domain.value_objects import Job, Member
+
 from src.infrastructure.repositories import JobsRepository, MembersRepository
 
 BASE_URL = "https://bn-hiring-challenge.fly.dev"
@@ -31,7 +29,7 @@ async def show():
     for member, jobs in result.items():
         click.echo(f"Jobs for {member.name}:")
         for job in jobs:
-            click.echo(f"   {job.title} ({job.location})")
+            click.echo(f"    {job.title} ({job.location})")
 
 
 if __name__ == '__main__':
