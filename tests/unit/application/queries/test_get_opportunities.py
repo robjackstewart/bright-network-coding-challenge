@@ -2,7 +2,8 @@ from unittest.mock import create_autospec
 import uuid
 
 import pytest
-from src.application.common.interfaces.interfaces import (
+from src.application.common.interfaces import (
+    GeographyCalculatorInterface,
     JobsRepositoryInterface,
     MembersRepositoryInterface,
 )
@@ -11,7 +12,7 @@ from src.domain.value_objects import Job, Member
 
 
 @pytest.mark.asyncio
-async def test_execute_returns_all_jobs_for_all_members():
+async def test_execute_returns_correct_jobs_for_members():
     # Arrange
     joe = Member(name="Joe", bio="I'm a designer from London, UK")
     marta = Member(name="Marta", bio="I'm looking for an internship in London")
@@ -57,7 +58,11 @@ async def test_execute_returns_all_jobs_for_all_members():
     jobs_repository.jobs.return_value = jobs
     members_repository = create_autospec(MembersRepositoryInterface, instance=True)
     members_repository.members.return_value = members
-    query = GetOpportunitiesQuery(jobs_repository, members_repository)
+    geography_calculator = create_autospec(GeographyCalculatorInterface, instance=True)
+    geography_calculator.extract_preferred_geographies.return_value = members
+    query = GetOpportunitiesQuery(
+        jobs_repository, members_repository, geography_calculator
+    )
 
     # Act
     result = await query.execute()

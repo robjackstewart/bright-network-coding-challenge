@@ -1,6 +1,6 @@
-from typing import List, Type
+from typing import Type
 from httpx import AsyncClient
-from src.application.common.interfaces.interfaces import (
+from src.application.common.interfaces import (
     JobsRepositoryInterface,
     MembersRepositoryInterface,
 )

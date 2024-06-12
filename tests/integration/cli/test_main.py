@@ -24,8 +24,10 @@ Jobs for {member2.name} ({member2.bio}):
     {job1.title} ({job1.location})
     {job2.title} ({job2.location})
 """.strip()
-    to_patch = f"{src.cli.main.__name__}.{GetOpportunitiesQuery.__name__}"
-    with patch(to_patch, autospec=True) as mock_query_class:
+
+    with patch(
+        f"{src.cli.main.__name__}.{GetOpportunitiesQuery.__name__}", autospec=True
+    ) as mock_query_class:
         mock_query_instance = mock_query_class.return_value
         mock_query_instance.execute.return_value = query_result
 
