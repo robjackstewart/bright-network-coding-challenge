@@ -19,7 +19,7 @@ class GetOpportunitiesQuery:
         self._jobs_repository = jobs_repository
         self._members_repository = members_repository
 
-    async def execute(self) -> dict[Member, list[Job]]:
+    async def execute(self) -> dict[Member, set[Job]]:
         jobs = await self._jobs_repository.jobs()
         members = await self._members_repository.members()
         jobs_by_members = {}
@@ -55,7 +55,7 @@ class GetOpportunitiesQuery:
                     if word not in locations and word in lower_case_job_title and job not in jobs_for_member:
                         jobs_for_member.append(job)
 
-            jobs_by_members[member] = jobs_for_member
+            jobs_by_members[member] = set(jobs_for_member)
 
         return jobs_by_members
 
