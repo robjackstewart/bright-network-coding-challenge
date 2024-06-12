@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CLI",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "module": "poetry",
+            "console": "integratedTerminal",
+            "args": [
+                "run",
+                "cli",
+                "show",
+            ],
+            "preLaunchTask": "poetry install"
+        }
+    ]
+}
