@@ -22,3 +22,15 @@ class MembersRepositoryInterface(ABC):
 
         :return: list[Member]
         """
+
+
+class GeographyCalculatorInterface(ABC):
+
+    @abstractmethod
+    def extract_preferred_geographies(
+        self, subject: str, available_geographies: set[str]
+    ) -> list[str]:
+        """Extract preferred geographies
+
+        :return: list[str]
+        """

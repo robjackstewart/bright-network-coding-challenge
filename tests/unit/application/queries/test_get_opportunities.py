@@ -2,7 +2,8 @@ from unittest.mock import create_autospec
 import uuid
 
 import pytest
-from src.application.common.interfaces.interfaces import (
+from src.application.common.interfaces import (
+    GeographyCalculatorInterface,
     JobsRepositoryInterface,
     MembersRepositoryInterface,
 )
@@ -11,7 +12,7 @@ from src.domain.value_objects import Job, Member
 
 
 @pytest.mark.asyncio
-async def test_execute_returns_all_jobs_for_all_members():
+async def test_execute_returns_correct_jobs_based_on_words_and_location():
     # Arrange
     joe = Member(name="Joe", bio="I'm a designer from London, UK")
     marta = Member(name="Marta", bio="I'm looking for an internship in London")
@@ -47,17 +48,23 @@ async def test_execute_returns_all_jobs_for_all_members():
     members: list[Member] = [joe, marta, hassan, grace, daisy]
 
     expected = {
-        joe: set([london_ux_designer]),
-        marta: set([london_legal_internship, london_sales_internship]),
-        hassan: set([london_ux_designer]),
-        grace: set([]),
-        daisy: set([london_software_developer, edinburgh_software_developer]),
+        joe: [london_ux_designer],
+        marta: [london_legal_internship, london_sales_internship],
+        hassan: [london_ux_designer],
+        grace: [],
+        daisy: [london_software_developer],
     }
     jobs_repository = create_autospec(JobsRepositoryInterface, instance=True)
     jobs_repository.jobs.return_value = jobs
     members_repository = create_autospec(MembersRepositoryInterface, instance=True)
     members_repository.members.return_value = members
-    query = GetOpportunitiesQuery(jobs_repository, members_repository)
+    geography_calculator = create_autospec(GeographyCalculatorInterface, instance=True)
+
+    geography_calculator.extract_preferred_geographies.return_value = ["london"]
+
+    query = GetOpportunitiesQuery(
+        jobs_repository, members_repository, geography_calculator
+    )
 
     # Act
     result = await query.execute()

@@ -25,4 +25,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-cli = "src.cli.main:cli"
+opportunities = "src.cli.main:cli"

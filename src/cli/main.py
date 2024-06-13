@@ -1,5 +1,6 @@
 from __future__ import annotations
 import asyncclick as click
+from src.application.common.services import GeographyCalculator
 from src.application.queries.get_opportunities import GetOpportunitiesQuery
 
 from src.infrastructure.repositories import JobsRepository, MembersRepository
@@ -22,7 +23,9 @@ async def show():
     jobs_repository = JobsRepository(BASE_URL)
     members_repository = MembersRepository(BASE_URL)
 
-    query = GetOpportunitiesQuery(jobs_repository, members_repository)
+    query = GetOpportunitiesQuery(
+        jobs_repository, members_repository, GeographyCalculator()
+    )
 
     result = await query.execute()
 
@@ -30,6 +33,8 @@ async def show():
         click.echo(f"Jobs for {member.name} ({member.bio}):")
         for job in jobs:
             click.echo(f"    {job.title} ({job.location})")
+        if not any(jobs):
+            click.echo("    No opportunities found.")
 
 
 if __name__ == "__main__":
