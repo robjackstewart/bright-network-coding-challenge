@@ -13,7 +13,7 @@ class GeographyCalculator(GeographyCalculatorInterface):
         self, subject: str, available_geographies: list[str]
     ) -> list[str]:
 
-        preferred_geographies: list[str] = []
+        preferred_geographies = set()
 
         subject = subject.lower()
 
@@ -35,11 +35,11 @@ class GeographyCalculator(GeographyCalculatorInterface):
             )
             match (is_inclusive_of_geography, is_exclusive_of_geography):
                 case (True, False):
-                    preferred_geographies.append(sections[geography_indicies[0]])
+                    preferred_geographies.add(sections[geography_indicies[0]])
                 case (False, True):
                     for geo in available_geographies:
                         if geo != sections[geography_indicies[0]]:
-                            preferred_geographies.append(geo)
+                            preferred_geographies.add(geo)
                 case _:
                     preferred_geographies = available_geographies
         else:
@@ -55,6 +55,10 @@ class GeographyCalculator(GeographyCalculatorInterface):
                     for entry in GeographyCalculator.__MIGRATE_FROM_PREFIXES
                 )
                 if is_inclusive_of_geography and not is_exclusive_of_geography:
-                    preferred_geographies.append(sections[index])
+                    preferred_geographies.add(sections[index])
+                else:
+                    for geo in available_geographies:
+                        if geo != sections[index]:
+                            preferred_geographies.add(geo)
 
-        return preferred_geographies
+        return list(preferred_geographies)
