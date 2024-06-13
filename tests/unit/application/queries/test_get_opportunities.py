@@ -25,18 +25,14 @@ async def test_execute_returns_correct_jobs_based_on_words_and_location():
         bio="I'm a software developer currently in Edinburgh but looking to relocate to London",
     )
 
-    london_software_developer = Job(
-        title="Software Developer", location="London")
-    york_marketing_internship = Job(
-        title="Marketing Internship", location="York")
+    london_software_developer = Job(title="Software Developer", location="London")
+    york_marketing_internship = Job(title="Marketing Internship", location="York")
     london_data_scientist = Job(title="Data Scientist", location="London")
     london_legal_internship = Job(title="Legal Internship", location="London")
-    manchester_project_manager = Job(
-        title="Project Manager", location="Manchester")
+    manchester_project_manager = Job(title="Project Manager", location="Manchester")
     london_sales_internship = Job(title="Sales Internship", location="London")
     london_ux_designer = Job(title="UX Designer", location="London")
-    edinburgh_software_developer = Job(
-        title="Software Developer", location="Edinburgh")
+    edinburgh_software_developer = Job(title="Software Developer", location="Edinburgh")
 
     jobs: list[Job] = [
         london_software_developer,
@@ -60,14 +56,11 @@ async def test_execute_returns_correct_jobs_based_on_words_and_location():
     }
     jobs_repository = create_autospec(JobsRepositoryInterface, instance=True)
     jobs_repository.jobs.return_value = jobs
-    members_repository = create_autospec(
-        MembersRepositoryInterface, instance=True)
+    members_repository = create_autospec(MembersRepositoryInterface, instance=True)
     members_repository.members.return_value = members
-    geography_calculator = create_autospec(
-        GeographyCalculatorInterface, instance=True)
+    geography_calculator = create_autospec(GeographyCalculatorInterface, instance=True)
 
-    geography_calculator.extract_preferred_geographies.return_value = [
-        'london']
+    geography_calculator.extract_preferred_geographies.return_value = ["london"]
 
     query = GetOpportunitiesQuery(
         jobs_repository, members_repository, geography_calculator
